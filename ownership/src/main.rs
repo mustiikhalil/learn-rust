@@ -9,7 +9,8 @@ fn main() {
     println!("Hello, world!");
 
     let s = String::from("Hello");
-    let s2 = s; // this called a move and it invalidates s
+    let s2 = s; // this called a move and it invalidates the old value s
+    // see figure 4.4 in the rust book
     let s1 = s2.clone(); // clones the data on the heap and creates a new pointer to it
     println!("{}", s2);
     println!("{}", s1);
