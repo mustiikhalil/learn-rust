@@ -30,8 +30,8 @@ fn main() {
 
     let ss = String::from("Hello world again!!");
 
-    passes_refrence(&ss);
-    println!("still alive since pass by ref{}", ss);
+    let size = caluclate_size(&ss);
+    println!("still alive since pass by ref {} with size {}", ss, size);
 
     let i = 42;
     makes_copy(i);
@@ -43,8 +43,12 @@ fn transfer_ownership(s: String) -> (String, usize) {
     (s, len)
 }
 
-fn passes_refrence(s: &String) {
-    println!("value: {}", s);
+// passing a value to a function by a reference is called borrowing
+
+fn caluclate_size(s: &String) -> usize {
+    s.len()
+    // we cant edit a borrowed val without the &mut String
+    // s.push_str(", meow!");
 }
 
 fn takes_ownership(some_string: String) {
