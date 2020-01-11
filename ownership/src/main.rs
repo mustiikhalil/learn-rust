@@ -24,8 +24,8 @@ fn main() {
     // Copy values are any Scalars and maybe tuples if they are all scalars (i32, i32) and not (i32, String)
 
     let s = String::from("Hello, world!!");
-    let (s3, sSize) = transfer_ownership(s);
-    println!("size: {}", sSize);
+    let (s3, s_size) = transfer_ownership(s);
+    println!("size: {}", s_size);
     takes_ownership(s3); // this function takes the ownership of the string
 
     let ss = String::from("Hello world again!!");
@@ -36,11 +36,59 @@ fn main() {
     let i = 42;
     makes_copy(i);
     println!("{}", i);
+    let mut new_s = ss.clone();
+    add_meow(&mut new_s);
+
+    println!("is here: {}", new_s);
+    // can't point into more than one mutating pointer
+    // this is fine, since the value is being mutated and referenced only once
+    let _xyz = &mut new_s;
+
+    // we can't use a pointer that will change the value of ss since
+    // we are using a and b as a none mutating values after declaring c
+    // if c is not commented out the code will not run
+    let a = &ss;
+    let b = &ss;
+    // let c = &mut ss; 
+    println!("{} {}", a, b); // c
+    // however we can do the following
+    let a = &new_s;
+    let b = &new_s;
+    println!("{} {}", a, b);
+    // since a and b are not in use anymore we can use c mut to point into new_s
+    let c = &mut new_s; 
+    println!("{}", c);
+
+    // also check dangling values
+    // a dangling value is a value that will by returned by reference however the actual value is going out of scope
+    // to avoid dangling values, just return the actual value
+
+    let mut some_word = String::from("Welcome to heartbreak!");
+    let word = first_word(&some_word);
+    println!("first word: {}", word);
+    some_word.clear();
 }
+
+fn first_word(s: &str) -> &str {
+    let bytes = s.as_bytes();
+
+    for (index, &itr) in bytes.iter().enumerate() {
+        if itr == b' ' {
+            return &s[0..index];
+        }
+    }
+    &s[..]
+}
+
+
 // transfering ownership would work like this since we are returning a string into a new value
 fn transfer_ownership(s: String) -> (String, usize) {
     let len = s.len();
     (s, len)
+}
+
+fn add_meow(s: &mut String) {
+    s.push_str("... meowww!");
 }
 
 // passing a value to a function by a reference is called borrowing
