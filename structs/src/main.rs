@@ -1,4 +1,4 @@
-
+#[derive(Debug)]
 struct User {
     username: String,
     email: String,
@@ -7,8 +7,30 @@ struct User {
 }
 
 // tuple struct 
+struct Color(u32, u32, u32);
 
-struct Color(i32, i32, i32);
+#[derive(Debug)]
+struct Rectangle {
+    width: u32,
+    height: u32
+}
+
+impl Rectangle {
+    fn area(&self) -> u32 {
+        self.width * self.height
+    }
+    fn can_hold(&self, rect: &Rectangle) -> bool {
+        self.width > rect.width && self.height > rect.height
+    }
+}
+
+impl Rectangle {
+    // Associated Functions since they dont use (self)
+    // these are still functions and not methods
+    fn square(size: u32) -> Rectangle {
+        Rectangle { width: size, height: size }
+    }
+}
 
 fn main() {
     println!("Hello, world!");
@@ -34,7 +56,15 @@ fn main() {
         ..second_user
     };
 
+    println!("user: {:#?}", third_user);
     let black = Color(0, 0, 0);
+
+    let rect = Rectangle { width: 30, height: 50};
+    let square = Rectangle::square(5);
+
+    println!("square is {:#?}", square);
+    println!("area is {}", rect.area());
+    println!("can hold {}", rect.can_hold(&Rectangle {width: 10, height: 40} ))
 }
 
 fn build_user(email: String, username: String) -> User {
